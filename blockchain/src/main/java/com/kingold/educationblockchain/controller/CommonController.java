@@ -59,7 +59,7 @@ public class CommonController {
                 StudentProfile studentProfile = JSONObject.parseObject(jsonParam,StudentProfile.class);
                 // 判断学号，学籍号 是否已存在
                 List<StudentProfile> studentProfileList = mStudentProfileService.GetStudentProfileByNumber(studentProfile.getKg_educationnumber(),studentProfile.getKg_studentnumber());
-                if(studentProfileList.size() <= 0){
+                if(studentProfileList == null || studentProfileList.size() <= 0){
                     flag = mStudentProfileService.AddStudentProfile(studentProfile);
                 }
                 break;
@@ -151,13 +151,13 @@ public class CommonController {
                     // 删除学生信息，同时删除学生教师关系信息，学生家长关系信息
                     if(mStudentProfileService.DeleteStudentProfile(id)){
                         List<StudentTeacher> stList = mStudentTeacherService.FindStudentTeacherByStudentId(id);
-                        if(stList.size() > 0){
+                        if(stList != null && stList.size() > 0){
                             for(StudentTeacher st : stList){
                                 mStudentTeacherService.DeleteStudentTeacher(st.getKg_teacherinformationid(),st.getKg_studentprofileid());
                             }
                         }
                         List<StudentParent> spList = mStudentParentService.FindStudentParentByStudentId(id);
-                        if(spList.size() > 0){
+                        if(spList != null && spList.size() > 0){
                             for(StudentParent sp : spList){
                                 mStudentParentService.DeleteStudentParent(sp.getKg_parentinformationid(),sp.getKg_studentprofileid());
                             }
@@ -172,7 +172,7 @@ public class CommonController {
                     // 删除教师信息，同时删除学生教师关系信息
                     if(mTeacherInfomationService.DeleteTeacherInformation(id)){
                         List<StudentTeacher> stList = mStudentTeacherService.FindStudentTeacherByTeacherId(id);
-                        if(stList.size() > 0){
+                        if(stList != null && stList.size() > 0){
                             for(StudentTeacher st : stList){
                                 mStudentTeacherService.DeleteStudentTeacher(st.getKg_teacherinformationid(),st.getKg_studentprofileid());
                             }
@@ -187,7 +187,7 @@ public class CommonController {
                     // 删除家长信息，同时删除学生家长关系信息
                     if(mParentInfomationService.DeleteParentInformation(id)){
                         List<StudentParent> spList = mStudentParentService.FindStudentParentByParentId(id);
-                        if(spList.size() > 0){
+                        if(spList != null && spList.size() > 0){
                             for(StudentParent sp : spList){
                                 mStudentParentService.DeleteStudentParent(sp.getKg_parentinformationid(),sp.getKg_studentprofileid());
                             }

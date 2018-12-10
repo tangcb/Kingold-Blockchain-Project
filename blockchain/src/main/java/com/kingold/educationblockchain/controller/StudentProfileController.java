@@ -43,7 +43,7 @@ public class StudentProfileController {
             } else {
                 System.out.println(parentInformation.getKg_parentinformationid());
                 List<StudentParent> studentParents = mStudentParentService.FindStudentParentByParentId(parentInformation.getKg_parentinformationid());
-                if (studentParents.size() <= 0) {
+                if (studentParents == null || studentParents.size() <= 0) {
                     return gson.toJson(new StudentProfile());
                 } else {
                     if (studentParents.size() == 1) {
@@ -112,17 +112,28 @@ public class StudentProfileController {
 
     public String GetStudentList(List<StudentTeacher> list){
         gson = new Gson();
-        if (list.size() <= 0) {
+        if (list == null || list.size() <= 0) {
             return gson.toJson(new StudentProfile());
         } else {
             List<StudentInfo> StudentInfoList = new ArrayList<>();
             for (StudentTeacher st : list) {
-                StudentProfile  profile = mStudentProfileService.GetStudentProfileById(st.getKg_studentprofileid());
+                StudentProfile profile = mStudentProfileService.GetStudentProfileById(st.getKg_studentprofileid());
                 StudentInfo info = new StudentInfo();
-                info.setKg_studentprofileid(profile.getKg_studentprofileid());
-                info.setKg_classname(profile.getKg_classname());
-                info.setKg_fullname(profile.getKg_fullname());
-                info.setKg_studentnumber(profile.getKg_studentnumber());
+                if(profile != null){
+                    info.setKg_studentprofileid(profile.getKg_studentprofileid());
+                    info.setKg_classname(profile.getKg_classname());
+                    info.setKg_fullname(profile.getKg_fullname());
+                    info.setKg_educationnumber(profile.getKg_educationnumber());
+                    info.setKg_sex(profile.getKg_sex());
+                }
+                List<StudentParent> parents = mStudentParentService.FindStudentParentByStudentId(st.getKg_studentprofileid());
+                if(parents != null && parents.size() > 0){
+                    ParentInformation parentInformation = mParentInfomationService.FindParentInformationById(parents.get(0).getKg_parentinformationid());
+                    if(parentInformation != null){
+                        info.setKg_parentName(parentInformation.getKg_name());
+                        info.setKg_parentPhoneNumber(parentInformation.getKg_phonenumber());
+                    }
+                }
                 StudentInfoList.add(info);
             }
             return gson.toJson(StudentInfoList);
