@@ -24,6 +24,8 @@ public class CommonController {
     private StudentTeacherService mStudentTeacherService;
     private Gson gson;
 
+    private Logger logger = Logger.getLogger(CommonController.class);
+
     @RequestMapping(value = "/Insert", method = RequestMethod.POST)
     public String Insert(@RequestBody String jsonParam, @RequestParam(value = "tablename", required = true)String tablename,@RequestParam(value = "synctype", required = true)String synctype) {
         gson = new Gson();

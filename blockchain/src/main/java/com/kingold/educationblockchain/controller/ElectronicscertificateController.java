@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import static com.kingold.educationblockchain.util.ResultResponse.makeErrRsp;
 import static com.kingold.educationblockchain.util.ResultResponse.makeOKRsp;
 
-@Controller
+@RestController
 @RequestMapping("/api")
 public class ElectronicscertificateController {
     @Autowired
